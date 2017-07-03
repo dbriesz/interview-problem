@@ -129,6 +129,10 @@ public class Prompter {
         }
         List<Integer> commands = input.getCommands();
 
+        getReady(commands);
+    }
+
+    public void getReady(List<Integer> commands) {
         if (input.getTemperature().equals("HOT")) {
             int count = 1;
             for (int i : commands) {
