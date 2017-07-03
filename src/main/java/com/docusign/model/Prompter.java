@@ -75,8 +75,8 @@ public class Prompter {
                     if (choice != 0) {
                         input.addCommand(choice);
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input. Please enter a number.");
+                } catch (NumberFormatException nfe) {
+                    System.out.printf("%nInvalid input. Please try again.%n%n");
                 }
             } while (choice > 0 || input.getCommands().size() > 8);
         } else {
@@ -105,10 +105,9 @@ public class Prompter {
                     if (choice != 0) {
                         input.addCommand(choice);
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("Invalid input. Please enter a number.");
+                } catch (NumberFormatException nfe) {
+                    System.out.printf("%nInvalid input. Please try again.%n%n");
                 }
-
             } while (choice > 0 || input.getCommands().size() > 8);
         }
         if (input.getCommands().get(0) != 8) {
@@ -123,7 +122,11 @@ public class Prompter {
             temperature = promptForTemperature();
         }
         input.setTemperature(temperature);
-        promptForCommands();
+        try {
+            promptForCommands();
+        } catch (IndexOutOfBoundsException ex) {
+            promptForCommands();
+        }
         List<Integer> commands = input.getCommands();
 
         if (input.getTemperature().equals("HOT")) {
