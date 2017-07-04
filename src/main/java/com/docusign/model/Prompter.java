@@ -1,8 +1,6 @@
 package com.docusign.model;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 public class Prompter {
@@ -62,19 +60,7 @@ public class Prompter {
                     System.out.printf("%nSelect a command (Type 0 to exit and print output):  ");
                     String optionAsString = reader.readLine();
                     choice = Integer.parseInt(optionAsString.trim());
-                    if (input.getCommands().contains(choice)
-                            || choice == 3
-                            || choice == 5
-                            || (choice == 1 && !input.getCommands().contains(6))
-                            || (choice == 2 && !input.getCommands().contains(4))
-                            || (choice == 7 && input.getCommands().size() != 5)
-                            || (choice == 0 && input.getCommands().size() < 6)) {
-                        System.out.println("fail");
-                        System.exit(0);
-                    }
-                    if (choice != 0) {
-                        input.addCommand(choice);
-                    }
+                    hotTempRules(choice);
                 } catch (NumberFormatException nfe) {
                     System.out.printf("%nInvalid input. Please try again.%n%n");
                 }
@@ -92,19 +78,7 @@ public class Prompter {
                     System.out.printf("%nSelect a command (Type 0 to exit and print output):  ");
                     String optionAsString = reader.readLine();
                     choice = Integer.parseInt(optionAsString.trim());
-                    if (input.getCommands().contains(choice)
-                            || (choice == 5 && !input.getCommands().contains(3))
-                            || (choice == 1 && !input.getCommands().contains(6))
-                            || (choice == 2 && !input.getCommands().contains(4))
-                            || (choice == 5 && !input.getCommands().contains(4))
-                            || (choice == 7 && input.getCommands().size() != 7)
-                            || (choice == 0 && input.getCommands().size() < 8)) {
-                        System.out.println("fail");
-                        System.exit(0);
-                    }
-                    if (choice != 0) {
-                        input.addCommand(choice);
-                    }
+                    coldTempRules(choice);
                 } catch (NumberFormatException nfe) {
                     System.out.printf("%nInvalid input. Please try again.%n%n");
                 }
@@ -113,6 +87,38 @@ public class Prompter {
         if (input.getCommands().get(0) != 8) {
             System.out.println("fail");
             System.exit(0);
+        }
+    }
+
+    private void coldTempRules(int choice) {
+        if (input.getCommands().contains(choice)
+                || (choice == 5 && !input.getCommands().contains(3))
+                || (choice == 1 && !input.getCommands().contains(6))
+                || (choice == 2 && !input.getCommands().contains(4))
+                || (choice == 5 && !input.getCommands().contains(4))
+                || (choice == 7 && input.getCommands().size() != 7)
+                || (choice == 0 && input.getCommands().size() < 8)) {
+            System.out.println("fail");
+            System.exit(0);
+        }
+        if (choice != 0) {
+            input.addCommand(choice);
+        }
+    }
+
+    private void hotTempRules(int choice) {
+        if (input.getCommands().contains(choice)
+                || choice == 3
+                || choice == 5
+                || (choice == 1 && !input.getCommands().contains(6))
+                || (choice == 2 && !input.getCommands().contains(4))
+                || (choice == 7 && input.getCommands().size() != 5)
+                || (choice == 0 && input.getCommands().size() < 6)) {
+            System.out.println("fail");
+            System.exit(0);
+        }
+        if (choice != 0) {
+            input.addCommand(choice);
         }
     }
 
@@ -128,11 +134,10 @@ public class Prompter {
             promptForCommands();
         }
         List<Integer> commands = input.getCommands();
-
         getReady(commands);
     }
 
-    public void getReady(List<Integer> commands) {
+    private void getReady(List<Integer> commands) {
         if (input.getTemperature().equals("HOT")) {
             int count = 1;
             for (int i : commands) {
